@@ -1,0 +1,75 @@
+image: markhobson/maven-chrome
+
+# enabling docker
+options:
+  docker: true
+
+pipelines:
+  default:
+    - step:
+        name: Run Maven
+        caches:
+          - maven
+        script:
+          - mvn -B verify # -B batch mode makes Maven less verbose
+        artifacts:
+          - target/**
+
+  branches:
+    master:
+    - step:
+         name: Run Maven
+         caches:
+          - maven
+         script:
+          - mvn -B verify # -B batch mode makes Maven less verbose
+         artifacts:
+          - target/**
+    - step:
+         name: Build Docker Image
+         script:
+          - export IMAGE_LATEST=$REGISTRY_DOMAIN/$REGISTRY_NAME/$APPNAME:latest
+          - export REPOSITORY_NAME=$REGISTRY_DOMAIN/$REGISTRY_NAME/$APPNAME
+          - export IMAGE_CURRENT=$REPOSITORY_NAME:$BITBUCKET_COMMIT
+
+            # build and push image to docker registry
+          - docker login -u $REGISTRY_NAME -p $REGISTRY_PASSWORD $REGISTRY_DOMAIN      
+          - docker build -t $IMAGE_CURRENT -t $REPOSITORY_NAME .
+          - docker push $IMAGE_CURRENT
+          - docker push $IMAGE_LATEST
+          - docker logout
+    - step:
+          name: Deploy to PaaS
+          deployment: test
+          script:
+            - export IMAGE_LATEST=$REGISTRY_DOMAIN/$REGISTRY_NAME/$APPNAME:latest
+
+            # creating tls certificate files from secrets
+            # write authority certificate
+            - echo "-----BEGIN CERTIFICATE-----" > ca-cert.pem
+            - echo $DOCKER_CA_CERT >> ca-cert.pem
+            - echo "-----END CERTIFICATE-----" >> ca-cert.pem
+            # write tls certificate
+            - echo "-----BEGIN CERTIFICATE-----" > server-cert.pem
+            - echo $DOCKER_SERVER_CERT >> server-cert.pem
+            - echo "-----END CERTIFICATE-----" >> server-cert.pem
+            # write tls key
+            - echo "-----BEGIN RSA PRIVATE KEY-----" > server-key.pem
+            - echo $DOCKER_SERVER_KEY >> server-key.pem
+            - echo "-----END RSA PRIVATE KEY-----" >> server-key.pem
+            # finished writing
+
+            # log remote docker host into registry
+            - docker -H $DOCKER_SERVER_ADDRESS --tls --tlscacert='ca-cert.pem' --tlscert='server-cert.pem' --tlskey='server-key.pem' login -u $REGISTRY_NAME -p $REGISTRY_PASSWORD $REGISTRY_DOMAIN
+
+            # pull latest image
+            - docker -H $DOCKER_SERVER_ADDRESS --tls --tlscacert='ca-cert.pem' --tlscert='server-cert.pem' --tlskey='server-key.pem' pull $IMAGE_LATEST
+
+            # logout remote docker host from registry
+            - docker -H $DOCKER_SERVER_ADDRESS --tls --tlscacert='ca-cert.pem' --tlscert='server-cert.pem' --tlskey='server-key.pem' logout
+
+            # stop and remove old container if exists
+            - docker -H $DOCKER_SERVER_ADDRESS --tls --tlscacert='ca-cert.pem' --tlscert='server-cert.pem' --tlskey='server-key.pem' rm -f $APPNAME || true
+
+            # start new container with ssl certificate
+            - docker -H $DOCKER_SERVER_ADDRESS --tls --tlscacert='ca-cert.pem' --tlscert='server-cert.pem' --tlskey='server-key.pem' run -d -e VIRTUAL_HOST=$APPNAME.cm.tm.kit.edu -e LETSENCRYPT_HOST=$APPNAME.cm.tm.kit.edu -e LETSENCRYPT_EMAIL=cm-infrastruktur-admins@lists.kit.edu --name $APPNAME --restart=always $IMAGE_LATEST

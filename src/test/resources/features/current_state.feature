@@ -6,11 +6,6 @@ Feature: Stationary Devices with their current state
 Background:
 	Given I am on the “CurrentState” page
 
-Examples: States
-	| state |
-	| free |
-	| occupied |
-
 Scenario: display <state> computers
 	Given one or more “computer” is currently “<state>”
 	Then the currently “<state>” computers are displayed as “<state>”

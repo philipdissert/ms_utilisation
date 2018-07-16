@@ -20,7 +20,6 @@ public class UtilizationThread extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println(UtilizationAdapter.getInstance().getCurrentState());
 		}
 
 

@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.ComputerStateATISAdapter;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class WorkspaceManagementApplication {

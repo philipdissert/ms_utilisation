@@ -20,7 +20,7 @@ public class RestManager {
 	
 	private static JSONObject jsonRequest(String subPath,String requestMethod) {
 		try {
-			String url = "https://pool.cm.tm.kit.edu/"+subPath;
+			String url = "https://workspace.cm.tm.kit.edu/"+subPath;
 			URL obj = new URL(url);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 			con.setRequestMethod(requestMethod);

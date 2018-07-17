@@ -6,10 +6,12 @@ public class UtilizationThread extends Thread {
 
 	@Override
 	public void run() {
+		UtilizationAdapter utilizationAdapter = UtilizationAdapter.getInstance();
 		while(true){
 			ComputerStateATISAdapter csaa = new ComputerStateATISAdapter();
 			try {
-				csaa.updateFreeSeatsFromATIS();
+				//csaa.updateFreeSeatsFromATIS();
+				utilizationAdapter.updateSeats();
 				csaa.updateComputersWithStatesFromATIS();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -20,9 +22,6 @@ public class UtilizationThread extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println(UtilizationAdapter.getInstance().getCurrentState());
 		}
-
-
 	}
 }

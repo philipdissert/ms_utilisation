@@ -3,6 +3,8 @@ package edu.kit.cm.WorkspaceManagement.Utilization.Service;
 import java.util.Date;
 import java.util.HashMap;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,8 +17,11 @@ public class UtilizationAdapter {
 
     private static UtilizationAdapter utilizationAdapter = new UtilizationAdapter();
 
+    @Getter@Setter
     private HashMap<Integer, PoolElementState> poolElementHashMap;
+    @Getter@Setter
     private History history;
+    @Getter@Setter
     private CurrentUtilization currentUtilization;
 
     private UtilizationAdapter() {
@@ -61,6 +66,19 @@ public class UtilizationAdapter {
         } catch (JSONException e) {
             throw new IllegalArgumentException();
         }
+    }
+
+    public void updateSeats() {
+        int freeCount = 0;
+        int occupiedCount = 0;
+        for(PoolElementState y : poolElementHashMap.values()) {
+            if(y.getState()==1 || y.getState()==2) {
+                freeCount++;
+            } else if(y.getState()==3 || y.getState()==4) {
+                occupiedCount++;
+            }
+        }
+        currentUtilization = new CurrentUtilization(freeCount,occupiedCount,poolElementHashMap.size());
     }
 
     public void updateSeats(Date date, int freeSeats, int maxATISPcs) {

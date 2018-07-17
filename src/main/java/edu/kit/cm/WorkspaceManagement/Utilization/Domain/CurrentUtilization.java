@@ -17,5 +17,5 @@ public class CurrentUtilization {
 		this.occupiedWorkspaces = occupiedWorkspaces;
 		this.percentageFree =     Math.round(100d/(double)Maxworkspaces*(double)freeWorkspaces);
 		this.percentageOccupied = Math.round(100d/(double)Maxworkspaces*(double)occupiedWorkspaces);
-	}	
+	}
 }

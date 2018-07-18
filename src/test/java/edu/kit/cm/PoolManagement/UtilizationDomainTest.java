@@ -21,7 +21,11 @@ public class UtilizationDomainTest {
         assertEquals(currentUtilization.getPercentageFree(), 80, 0.01);
         assertEquals(currentUtilization.getPercentageOccupied(), 20, 0.01);
 
+        CurrentUtilization currentUtilization2 = new CurrentUtilization(2,1,3);
+        System.out.println(currentUtilization2.getPercentageFree());
+
         History history = new History();
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         Date d = simpleDateFormat.parse("11.11.2010");
         history.getUtilizationList().put(d, currentUtilization);

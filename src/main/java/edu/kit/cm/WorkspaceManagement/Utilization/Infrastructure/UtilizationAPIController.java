@@ -1,13 +1,14 @@
 package edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure;
 
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.kit.cm.WorkspaceManagement.Utilization.Service.UtilizationAdapter;
 
 
-
+@CrossOrigin
 @RestController
 public class UtilizationAPIController {
 	

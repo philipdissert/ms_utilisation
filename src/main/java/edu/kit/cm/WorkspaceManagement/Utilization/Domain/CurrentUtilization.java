@@ -12,10 +12,10 @@ public class CurrentUtilization {
 	private double percentageFree;
 	private double percentageOccupied;
 	
-	public CurrentUtilization(int freeWorkspaces, int occupiedWorkspaces, int Maxworkspaces) {
+	public CurrentUtilization(int freeWorkspaces, int occupiedWorkspaces, int maxworkspaces) {
 		this.freeWorkspaces = freeWorkspaces;
 		this.occupiedWorkspaces = occupiedWorkspaces;
-		this.percentageFree =     Math.round(100d/(double)Maxworkspaces*(double)freeWorkspaces);
-		this.percentageOccupied = Math.round(100d/(double)Maxworkspaces*(double)occupiedWorkspaces);
+		this.percentageFree =     Math.round(((double) freeWorkspaces/(double)maxworkspaces)*100.0);//100d/(double)Maxworkspaces*(double)freeWorkspaces);
+		this.percentageOccupied = Math.round(((double) occupiedWorkspaces/(double)maxworkspaces)*100.0);
 	}
 }

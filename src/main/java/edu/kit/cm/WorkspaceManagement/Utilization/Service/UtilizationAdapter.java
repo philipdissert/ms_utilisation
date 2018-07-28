@@ -32,14 +32,15 @@ public class UtilizationAdapter {
         return utilizationAdapter;
     }
 
-    public void createPoolElementHashMap(JSONObject poolElementList) {
+    public void createPoolElementHashMap(JSONArray jsonArray) {
         poolElementHashMap = new HashMap<Integer, PoolElementState>();
         try {
-            JSONArray jsonArray = poolElementList.getJSONArray("data");
             for (int i = 0; i < jsonArray.length(); i++) {
                 int id = jsonArray.getJSONObject(i).getInt("id");
                 String type = jsonArray.getJSONObject(i).getString("type");
-                poolElementHashMap.put(id, new PoolElementState(id, type));
+                if("PC".equals(type)) {
+                    poolElementHashMap.put(id, new PoolElementState(id, type));
+                }
             }
         } catch (JSONException e) {
             throw new IllegalArgumentException();

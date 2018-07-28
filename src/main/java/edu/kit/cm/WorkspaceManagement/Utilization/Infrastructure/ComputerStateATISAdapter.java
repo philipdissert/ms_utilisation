@@ -38,8 +38,9 @@ public class ComputerStateATISAdapter {
 	
 	public void generatePoolElementsFromWorkspace() {
 		RestTemplate rt = new RestTemplate();
-		JSONObject jsonObject = new JSONObject(rt.getForEntity("https://workspace.cm.tm.kit.edu/learningDesks",String.class).getBody());
-		UtilizationAdapter.getInstance().createPoolElementHashMap(jsonObject);
+		JSONArray jsonArray = new JSONArray(rt.getForEntity("https://workspace.cm.tm.kit.edu/layout/poolElements",String.class).getBody());
+
+		UtilizationAdapter.getInstance().createPoolElementHashMap(jsonArray);
 	}
 	
 	public void updateFreeSeatsFromATIS() throws Exception {

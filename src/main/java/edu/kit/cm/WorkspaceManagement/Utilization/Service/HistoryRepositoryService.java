@@ -8,16 +8,17 @@ import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.His
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class HistoryAdapter{
+public class HistoryRepositoryService {
 
     private HistoryCrudRepository historyCrudRepository;
     private HistoryEntryMapper historyEntryMapper;
 
-    public HistoryAdapter(HistoryCrudRepository historyCrudRepository) {
+    public HistoryRepositoryService(HistoryCrudRepository historyCrudRepository) {
         this.historyCrudRepository = historyCrudRepository;
         this.historyEntryMapper = new HistoryEntryMapper();
     }
@@ -34,6 +35,10 @@ public class HistoryAdapter{
             list.add(historyEntryMapper.map(historyEntryJpa));
         };
         return list;
+    }
+
+    public LocalDateTime getMaxDate() {
+        return historyEntryMapper.map(historyCrudRepository.findFirstByDateIsNotNullOrderByDateDesc()).getDate();
     }
 
 }

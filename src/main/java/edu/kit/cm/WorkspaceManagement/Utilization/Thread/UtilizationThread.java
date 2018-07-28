@@ -1,6 +1,9 @@
-package edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure;
+package edu.kit.cm.WorkspaceManagement.Utilization.Thread;
 
+import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.ComputerStateATISAdapter;
 import edu.kit.cm.WorkspaceManagement.Utilization.Service.UtilizationAdapter;
+
+import java.time.LocalDateTime;
 
 public class UtilizationThread extends Thread {
 
@@ -10,7 +13,6 @@ public class UtilizationThread extends Thread {
 		while(true){
 			ComputerStateATISAdapter csaa = new ComputerStateATISAdapter();
 			try {
-				//csaa.updateFreeSeatsFromATIS();
 				utilizationAdapter.updateSeats();
 				csaa.updateComputersWithStatesFromATIS();
 			} catch (Exception e) {

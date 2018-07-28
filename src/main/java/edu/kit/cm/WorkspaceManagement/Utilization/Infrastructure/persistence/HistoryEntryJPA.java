@@ -16,22 +16,13 @@ public class HistoryEntryJPA {
     private int id;
     private LocalDateTime date;
     private int freeSeats;
-    private String type;
 
     public HistoryEntryJPA() {
 
     }
 
-    public HistoryEntryJPA(int id, int freeSeats, LocalDateTime date, String type) {
-        this.id = id;
+    public HistoryEntryJPA(int freeSeats, LocalDateTime date) {
         this.freeSeats = freeSeats;
         this.date = date;
-        this.type = type;
-    }
-
-    public HistoryEntryJPA(int freeSeats, LocalDateTime date, String type) {
-        this.freeSeats = freeSeats;
-        this.date = date;
-        this.type = type;
     }
 }

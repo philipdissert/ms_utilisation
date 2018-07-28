@@ -11,11 +11,9 @@ public class HistoryEntry {
 
     private LocalDateTime date;
     private int freeSeats;
-    private String type;
 
-    public HistoryEntry(int freeSeats, LocalDateTime date, String type){
+    public HistoryEntry(int freeSeats, LocalDateTime date){
         this.freeSeats = freeSeats;
         this.date = date;
-        this.type = type;
     }
 }

@@ -1,8 +1,11 @@
 package edu.kit.cm.WorkspaceManagement.Utilization.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
+import edu.kit.cm.WorkspaceManagement.Utilization.Domain.HistoryEntry;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONArray;
@@ -86,6 +89,7 @@ public class UtilizationAdapter {
         history.getUtilizationList().put(date, currentUtilization);
         currentUtilization = new CurrentUtilization(freeSeats, maxATISPcs - freeSeats, maxATISPcs);
     }
+
 
     public JSONObject getCurrentUtilization() {
         JSONObject jsonObject = new JSONObject();

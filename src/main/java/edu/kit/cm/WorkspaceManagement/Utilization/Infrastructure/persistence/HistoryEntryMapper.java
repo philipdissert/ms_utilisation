@@ -12,10 +12,10 @@ public class HistoryEntryMapper {
     }
 
     public HistoryEntry map(HistoryEntryJPA entry) {
-        return new HistoryEntry(entry.getFreeSeats(), entry.getDate(), entry.getType());
+        return new HistoryEntry(entry.getFreeSeats(), entry.getDate());
     }
 
     public HistoryEntryJPA map(HistoryEntry entry) {
-        return new HistoryEntryJPA(entry.getFreeSeats(), entry.getDate(), entry.getType());
+        return new HistoryEntryJPA(entry.getFreeSeats(), entry.getDate());
     }
 }

@@ -1,10 +1,12 @@
 package edu.kit.cm.WorkspaceManagement;
 
-import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.RepositoryThread;
+import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.HistoryEntryJPA;
+import edu.kit.cm.WorkspaceManagement.Utilization.Thread.RepositoryThread;
 import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.HistoryCrudRepository;
-import edu.kit.cm.WorkspaceManagement.Utilization.Service.HistoryAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class ThreadManager {
@@ -15,9 +17,10 @@ public class ThreadManager {
     @Autowired
     public ThreadManager(HistoryCrudRepository historyCrudRepository) {
         this.historyCrudRepository = historyCrudRepository;
-
+        System.out.println(historyCrudRepository);
         RepositoryThread rt = new RepositoryThread(historyCrudRepository);
         rt.start();
+
     }
 
 }

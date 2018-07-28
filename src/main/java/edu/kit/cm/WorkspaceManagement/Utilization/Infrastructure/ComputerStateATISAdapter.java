@@ -1,8 +1,13 @@
 package edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import edu.kit.cm.WorkspaceManagement.Utilization.Domain.HistoryEntry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -44,25 +49,36 @@ public class ComputerStateATISAdapter {
 	}
 	
 	public void updateFreeSeatsFromATIS() throws Exception {
-        RestTemplate rt = new RestTemplate();
-        String in = rt.getForEntity("https://webadmin.informatik.kit.edu/pool/html/freeseats.txt",String.class).getBody();
-        String[] inputLineArray = in.split(" ");
-        int id = Integer.parseInt(inputLineArray[inputLineArray.length-1].replaceAll("\\D+",""));
-
+		String[] array = getSeatsStringArray();
+		String[] string = array[array.length-1].split(" ");
+        int id = Integer.parseInt(string[1]);
+		System.out.println(id);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd_HH:mm");
-        String[] sdate = inputLineArray[inputLineArray.length-2].split("\\n");
-        String stdate = sdate[sdate.length-1].replaceAll("[^\\_:.0123456789]","");
-        Date date = formatter.parse(stdate);
+        String sdate = string[0];
+        Date date = formatter.parse(sdate);
         UtilizationAdapter.getInstance().updateSeats(date, id, MAX_ATIS_PCS);
 	}
 
-//	
-//	public int getLastFreeSeatsFromATIS() throws Exception {
-//		BufferedReader in = getBufferedReaderByAdress("https://webadmin.informatik.kit.edu/pool/html/freeseats.txt");
-//		String inputLine;
-//		String erg="";
-//		while ((inputLine = in.readLine()) != null) erg=inputLine;
-//		return Integer.valueOf(erg.split(" ")[1]);
-//	}
-//
+	public List<HistoryEntry> getSeats(LocalDateTime localDateTime) {
+		List<HistoryEntry> list = new ArrayList<HistoryEntry>();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd_HH:mm");
+		String[] array = getSeatsStringArray();
+		for(int i = array.length-1; i >= 0; i--) {
+			String[] string = array[i].split(" ");
+			int seats = Integer.parseInt(string[1]);
+			LocalDateTime date = LocalDateTime.parse(string[0], formatter);
+			if(date.isBefore(localDateTime)){
+				break;
+			}
+			list.add(new HistoryEntry(seats, date));
+		}
+		return list;
+	}
+
+	private String[] getSeatsStringArray() {
+		RestTemplate rt = new RestTemplate();
+		String in = rt.getForEntity("https://webadmin.informatik.kit.edu/pool/html/freeseats.txt",String.class).getBody();
+		String[] stringArray = in.split("\\r?\\n");
+		return  stringArray;
+	}
 }

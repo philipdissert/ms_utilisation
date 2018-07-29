@@ -1,6 +1,5 @@
 package edu.kit.cm.WorkspaceManagement.Utilization.Thread;
 
-import edu.kit.cm.WorkspaceManagement.Utilization.Domain.HistoryEntry;
 import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.ComputerStateATISAdapter;
 import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.HistoryCrudRepository;
 import edu.kit.cm.WorkspaceManagement.Utilization.Service.HistoryRepositoryService;
@@ -21,26 +20,20 @@ public class RepositoryThread extends Thread{
         while(true) {
             update();
             try {
-                Thread.sleep(100000);
+                Thread.sleep(120000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
-
-//
-//        historyRepositoryService.createEntity(new HistoryEntry(3,LocalDateTime.of(2018,9,6,20,34,54),"PC"));
-//        historyRepositoryService.createEntity(new HistoryEntry(3,LocalDateTime.of(2018,10,5,5,3,5),"PC"));
-//        historyRepositoryService.createEntity(new HistoryEntry(3,LocalDateTime.of(2017,9,6,20,34,54),"PC"));
-//        historyRepositoryService.findAllEntitys().forEach(x->{
-//            System.out.println(x.toString());
-//        });
-//        System.out.println(historyRepositoryService.getMaxDate());
     }
 
     private void update() {
         ComputerStateATISAdapter csaa = new ComputerStateATISAdapter();
-        csaa.getSeats(historyRepositoryService.getMaxDate()).forEach(x -> {
+        LocalDateTime date = historyRepositoryService.getLatestDate();
+        if (date == null) {
+            date = LocalDateTime.of(0,1,1,0,0,0);
+        }
+        csaa.getSeats(date).forEach(x -> {
             historyRepositoryService.createEntity(x);
         });
     }

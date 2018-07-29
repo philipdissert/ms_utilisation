@@ -15,4 +15,6 @@ public interface HistoryCrudRepository extends CrudRepository<HistoryEntryJPA, L
 //    public Long countById();
 
     public HistoryEntryJPA findFirstByDateIsNotNullOrderByDateDesc();
+
+    public List<HistoryEntryJPA> findByDateIsBetween(LocalDateTime from, LocalDateTime to);
 }

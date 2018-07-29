@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @Entity
 public class HistoryEntryJPA {
     @Id
-    @GeneratedValue
-    private int id;
     private LocalDateTime date;
     private int freeSeats;
 

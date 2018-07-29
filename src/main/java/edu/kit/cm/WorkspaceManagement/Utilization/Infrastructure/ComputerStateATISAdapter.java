@@ -67,7 +67,7 @@ public class ComputerStateATISAdapter {
 			String[] string = array[i].split(" ");
 			int seats = Integer.parseInt(string[1]);
 			LocalDateTime date = LocalDateTime.parse(string[0], formatter);
-			if(date.isBefore(localDateTime)){
+			if(!date.isAfter(localDateTime)){
 				break;
 			}
 			list.add(new HistoryEntry(seats, date));

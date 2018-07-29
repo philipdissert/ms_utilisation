@@ -37,8 +37,21 @@ public class HistoryRepositoryService {
         return list;
     }
 
-    public LocalDateTime getMaxDate() {
-        return historyEntryMapper.map(historyCrudRepository.findFirstByDateIsNotNullOrderByDateDesc()).getDate();
+    public LocalDateTime getLatestDate() {
+
+        HistoryEntry historyEntry = historyEntryMapper.map(historyCrudRepository.findFirstByDateIsNotNullOrderByDateDesc());
+        if(historyEntry == null) {
+            return null;
+        }
+        return historyEntry.getDate();
+    }
+
+    public List<HistoryEntry> findAllBetween(LocalDateTime from, LocalDateTime to) {
+        List<HistoryEntry> list = new ArrayList<HistoryEntry>();
+        historyCrudRepository.findByDateIsBetween(from, to).forEach(x-> {
+            list.add(historyEntryMapper.map(x));
+        });
+        return list;
     }
 
 }

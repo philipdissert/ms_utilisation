@@ -12,10 +12,16 @@ public class HistoryEntryMapper {
     }
 
     public HistoryEntry map(HistoryEntryJPA entry) {
+        if (entry == null) {
+            return null;
+        }
         return new HistoryEntry(entry.getFreeSeats(), entry.getDate());
     }
 
     public HistoryEntryJPA map(HistoryEntry entry) {
+        if (entry == null) {
+            return null;
+        }
         return new HistoryEntryJPA(entry.getFreeSeats(), entry.getDate());
     }
 }

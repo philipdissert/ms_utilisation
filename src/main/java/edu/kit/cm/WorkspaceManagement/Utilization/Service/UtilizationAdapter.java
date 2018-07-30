@@ -1,5 +1,7 @@
 package edu.kit.cm.WorkspaceManagement.Utilization.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -139,6 +141,10 @@ public class UtilizationAdapter {
 
         }
         return jsonObject;
+    }
+
+    public int[] getPredictionAtDate(String dayOfWeek) {
+        return DoSomeMagicAvg.getInstance().getPrediction(DayOfWeek.valueOf(dayOfWeek));
     }
 
 }

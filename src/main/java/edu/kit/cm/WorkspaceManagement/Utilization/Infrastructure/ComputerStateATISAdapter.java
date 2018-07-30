@@ -52,7 +52,6 @@ public class ComputerStateATISAdapter {
 		String[] array = getSeatsStringArray();
 		String[] string = array[array.length-1].split(" ");
         int id = Integer.parseInt(string[1]);
-		System.out.println(id);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd_HH:mm");
         String sdate = string[0];
         Date date = formatter.parse(sdate);

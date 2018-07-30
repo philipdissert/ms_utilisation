@@ -3,6 +3,7 @@ package edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.kit.cm.WorkspaceManagement.Utilization.Service.UtilizationAdapter;
@@ -43,4 +44,7 @@ public class UtilizationAPIController {
 	public double getCurrentUtilizationOccupiedPercentage() {
 		return utilizationAdapter.getPercentageOccupied();
 	}
+
+	@GetMapping("/prediction/day/{day}")
+	public int[] getPredictionAtDate(@PathVariable("day") String date) {return utilizationAdapter.getPredictionAtDate(date);}
 }

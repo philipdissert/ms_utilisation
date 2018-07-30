@@ -16,8 +16,8 @@ public class ThreadManager {
 
     @Autowired
     public ThreadManager(HistoryCrudRepository historyCrudRepository) {
+
         this.historyCrudRepository = historyCrudRepository;
-        System.out.println(historyCrudRepository);
         RepositoryThread rt = new RepositoryThread(historyCrudRepository);
         rt.start();
 

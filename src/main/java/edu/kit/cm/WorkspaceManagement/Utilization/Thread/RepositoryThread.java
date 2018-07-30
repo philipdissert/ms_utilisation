@@ -22,9 +22,10 @@ public class RepositoryThread extends Thread{
     public void run() {
        DoSomeMagicAvg doSomeMagicAvg = DoSomeMagicAvg.getInstance();
        doSomeMagicAvg.setHistoryRepositoryService(historyRepositoryService);
-       doSomeMagicAvg.update();
+
         while(true) {
             update();
+            doSomeMagicAvg.update();
             try {
                 Thread.sleep(120000);
             } catch (InterruptedException e) {

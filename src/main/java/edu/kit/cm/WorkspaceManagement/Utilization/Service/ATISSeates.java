@@ -18,6 +18,7 @@ public class ATISSeates implements IFreeSeats {
 			String[] string = array[i].split(" ");
 			int seats = Integer.parseInt(string[1]);
 			LocalDateTime date = LocalDateTime.parse(string[0], formatter);
+			//System.out.println(date.toString()+ localDateTime.toString());
 			if(!date.isAfter(localDateTime)){
 				break;
 			}

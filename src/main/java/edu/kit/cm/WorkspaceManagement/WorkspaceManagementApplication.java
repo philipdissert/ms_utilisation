@@ -26,8 +26,8 @@ public class WorkspaceManagementApplication {
 		try {
 			//csaa.generatePoolElementsFromWorkspace();
 			//csaa.updateComputersWithStatesFromATIS();
-			utilizationAdapter.createPoolElementHashMap(rt.getForEntity("https://workspace.cm.tm.kit.edu/layout/poolElementsJSONArray", JSONArray.class).getBody());			
-			utilizationAdapter.updateStates(rt.getForEntity("https://workspace.cm.tm.kit.edu/getComputersWithState", JSONObject.class).getBody());
+			utilizationAdapter.createPoolElementHashMap(new JSONArray(rt.getForEntity("https://workspace.cm.tm.kit.edu/layout/poolElementsJSONArray", String.class).getBody()));
+			utilizationAdapter.updateStates(new JSONObject(rt.getForEntity("https://workspace.cm.tm.kit.edu/getComputersWithState", String.class).getBody()));
 			utilizationAdapter.updateSeats();
 			//csaa.updateFreeSeatsFromATIS();
 		} catch (Exception e) {

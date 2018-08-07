@@ -2,7 +2,7 @@ package edu.kit.cm.WorkspaceManagement.Utilization.Thread;
 
 import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.FreeSeats;
 import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.HistoryCrudRepository;
-import edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction.DoSomeMagicAvg;
+import edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction.PredictionAlgorithmAvg;
 import edu.kit.cm.WorkspaceManagement.Utilization.Service.HistoryRepositoryService;
 import edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction.Prediction;
 
@@ -21,7 +21,7 @@ public class RepositoryThread extends Thread{
 
     @Override
     public void run() {
-       Prediction prediction = DoSomeMagicAvg.getInstance();
+       Prediction prediction = PredictionAlgorithmAvg.getInstance();
        prediction.setHistoryRepositoryService(historyRepositoryService);
 
         while(true) {

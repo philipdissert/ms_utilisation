@@ -2,6 +2,7 @@ package edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction;
 
 import edu.kit.cm.WorkspaceManagement.Utilization.Domain.HistoryEntry;
 import edu.kit.cm.WorkspaceManagement.Utilization.Service.HistoryRepositoryService;
+import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,37 +22,60 @@ public abstract class PredictionAlgorithm implements Prediction{
         prediction = new HashMap<>();
     }
 
-    protected abstract int doSomeMagic(List<List<HistoryEntry>> listDays);
-    protected abstract int[] doSomeMagicToday(List<List<List<HistoryEntry>>> listPast, List<List<HistoryEntry>> listToday);
+    protected abstract int[] getArrayToday(List<List<HistoryEntry>> list);
+    protected abstract int[][] getArrayPast(List<List<List<HistoryEntry>>> listPast);
 
     @Override
     public void update() {
         for(DayOfWeek dayOfWeek: DayOfWeek.values()) {
             if (dayOfWeek.equals(LocalDate.now().getDayOfWeek())) {
-                this.updateToday();
+                prediction.put(dayOfWeek,updateToday(dayOfWeek));
                 continue;
             }
-            this.update(dayOfWeek);
+            prediction.put(dayOfWeek,update(dayOfWeek));
         }
     }
 
-    @Override
-    public void updateToday() {
-        DayOfWeek today = LocalDate.now().getDayOfWeek();
-        List<List<List<HistoryEntry>>> listOfBlocks = getHistoryfromPastWeeks(today);
-        List<List<HistoryEntry>> listToday = getHistoryFromToday();
-        int[] predictionDay = doSomeMagicToday(listOfBlocks, listToday);
-        prediction.put(today, predictionDay);
+    public int[] updateToday(DayOfWeek dayOfWeek) {
+        LocalTime[] blocks = getBlocks(dayOfWeek);
+        LocalTime time = LocalTime.now();
+        int[] predictionDay = new int[blocks.length - 1];
+        int[] simplePredictionDay = update(dayOfWeek);
+        int[] today = getArrayToday(getHistoryFromToday());
+
+        double c = 0;
+
+        for(int i = 0; i < predictionDay.length; i++) {
+
+            if (time.isBefore(blocks[0])){
+                predictionDay = update(dayOfWeek);
+                break;
+            }
+            if(time.isBefore(blocks[i + 1])) {
+                if(time.isAfter(blocks[i])) c = (double)predictionDay[i-1]/simplePredictionDay[i-1];
+                predictionDay[i] = (int) ((double)simplePredictionDay[i] + (double)simplePredictionDay[i] * c)/2;
+            } else {
+                predictionDay[i] = today[i];
+            }
+
+
+
+        }
+        return predictionDay;
     }
 
-    private void update(DayOfWeek dayOfWeek) {
+    private int[] update(DayOfWeek dayOfWeek) {
         int[] predictionDay = new int[getBlocks(dayOfWeek).length - 1];
-        List<List<List<HistoryEntry>>> listOfBlocks = getHistoryfromPastWeeks(dayOfWeek);
+        int[][] past = getArrayPast(getHistoryfromPastWeeks(dayOfWeek));
 
-        for (int i = 0; i < listOfBlocks.size(); i++) {
-            predictionDay[i] = doSomeMagic(listOfBlocks.get(i));
+        for (int i = 0; i < past.length; i++) {
+            SimpleRegression simpleRegression = new SimpleRegression();
+            for(int k = 0; k < past[i].length; k++) {
+                simpleRegression.addData(k, past[i][k]);
+            }
+            predictionDay[i] = (int) simpleRegression.predict(past[i].length);
         }
-        prediction.put(dayOfWeek,predictionDay);
+        return predictionDay;
     }
 
 
@@ -81,7 +105,7 @@ public abstract class PredictionAlgorithm implements Prediction{
         List<List<List<HistoryEntry>>> listOfBlocks = new ArrayList<List<List<HistoryEntry>>>();
 
         LocalTime[] time = getBlocks(dayOfWeek);
-        LocalDate date = LocalDate.now().with(dayOfWeek);
+        LocalDate date = LocalDate.now().with(dayOfWeek).minusDays(60);
         if(date.isAfter(LocalDate.now())) {
             date.minusDays(7);
         }
@@ -101,7 +125,7 @@ public abstract class PredictionAlgorithm implements Prediction{
 
     private List<List<HistoryEntry>> getHistoryFromToday() {
         List<List<HistoryEntry>> listOfBlocks = new ArrayList<>();
-        LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.now().minusDays(60);
         LocalTime[] time = getBlocks(date.getDayOfWeek());
         for(int i = 1; i < time.length; i++) {
             LocalDateTime from = LocalDateTime.of(date, time[i - 1]);

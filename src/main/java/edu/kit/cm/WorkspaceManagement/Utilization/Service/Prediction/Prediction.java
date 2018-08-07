@@ -9,8 +9,6 @@ public interface Prediction {
 
     public void update();
 
-    public void updateToday();
-
     public int[] getPrediction(DayOfWeek dayOfWeek);
 
     public void setHistoryRepositoryService(HistoryRepositoryService historyRepositoryService);

@@ -4,7 +4,7 @@ import java.time.DayOfWeek;
 import java.util.Date;
 import java.util.HashMap;
 
-import edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction.DoSomeMagicAvg;
+import edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction.PredictionAlgorithmAvg;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONArray;
@@ -141,7 +141,7 @@ public class UtilizationAdapter {
     }
 
     public int[] getPredictionAtDate(String dayOfWeek) {
-        return DoSomeMagicAvg.getInstance().getPrediction(DayOfWeek.valueOf(dayOfWeek));
+        return PredictionAlgorithmAvg.getInstance().getPrediction(DayOfWeek.valueOf(dayOfWeek));
     }
 
 }

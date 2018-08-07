@@ -1,13 +1,10 @@
 package edu.kit.cm.WorkspaceManagement.Utilization.Service;
 
 import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
-import edu.kit.cm.WorkspaceManagement.Utilization.Domain.HistoryEntry;
+import edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction.DoSomeMagicAvg;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONArray;

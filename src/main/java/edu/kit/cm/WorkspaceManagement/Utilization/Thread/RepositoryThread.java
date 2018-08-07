@@ -2,11 +2,10 @@ package edu.kit.cm.WorkspaceManagement.Utilization.Thread;
 
 import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.ComputerStateATISAdapter;
 import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.HistoryCrudRepository;
-import edu.kit.cm.WorkspaceManagement.Utilization.Service.DoSomeMagicAvg;
+import edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction.DoSomeMagicAvg;
 import edu.kit.cm.WorkspaceManagement.Utilization.Service.HistoryRepositoryService;
-import edu.kit.cm.WorkspaceManagement.Utilization.Service.PredictionAlgorithm;
+import edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction.Prediction;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 public class RepositoryThread extends Thread{
@@ -20,12 +19,12 @@ public class RepositoryThread extends Thread{
 
     @Override
     public void run() {
-       DoSomeMagicAvg doSomeMagicAvg = DoSomeMagicAvg.getInstance();
-       doSomeMagicAvg.setHistoryRepositoryService(historyRepositoryService);
+       Prediction prediction = DoSomeMagicAvg.getInstance();
+       prediction.setHistoryRepositoryService(historyRepositoryService);
 
         while(true) {
             update();
-            doSomeMagicAvg.update();
+            prediction.update();
             try {
                 Thread.sleep(120000);
             } catch (InterruptedException e) {

@@ -6,7 +6,11 @@ import lombok.Getter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Entity
@@ -23,4 +27,5 @@ public class HistoryEntryJPA {
         this.freeSeats = freeSeats;
         this.date = date;
     }
+
 }

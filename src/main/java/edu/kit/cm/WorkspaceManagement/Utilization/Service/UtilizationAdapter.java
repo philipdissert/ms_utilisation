@@ -1,6 +1,7 @@
 package edu.kit.cm.WorkspaceManagement.Utilization.Service;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -140,8 +141,24 @@ public class UtilizationAdapter {
         return jsonObject;
     }
 
-    public int[] getPredictionAtDate(String dayOfWeek) {
+    public int[] getPredictionAtWeekDay(String dayOfWeek) {
         return PredictionAlgorithmAvg.getInstance().getPrediction(DayOfWeek.valueOf(dayOfWeek));
     }
 
+    public int[] getPredictionAtDate(String date) {
+        return PredictionAlgorithmAvg.getInstance().getPrediction(parseStringDateOnControllerToDate(date));
+
+    }
+
+    /**
+     * Parse 20050131 to LocalDate(2005-01-32)
+     * @param date
+     * @return
+     */
+    private LocalDate parseStringDateOnControllerToDate(String date) {
+        return LocalDate.of(
+                Integer.valueOf(date.substring(0,4)),
+                Integer.valueOf(date.substring(4,6)),
+                Integer.valueOf(date.substring(6,8)));
+    }
 }

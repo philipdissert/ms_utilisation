@@ -46,5 +46,10 @@ public class UtilizationAPIController {
 	}
 
 	@GetMapping("/prediction/day/{day}")
-	public int[] getPredictionAtDate(@PathVariable("day") String date) {return utilizationAdapter.getPredictionAtDate(date);}
+	public int[] getPredictionAtWeekday(@PathVariable("day") String date) {return utilizationAdapter.getPredictionAtWeekDay(date);}
+
+	@GetMapping("/prediction/date/{day}")
+	public int [] getPredictionAtDate(@PathVariable("day") String date) {
+		return utilizationAdapter.getPredictionAtDate(date);
+	}
 }

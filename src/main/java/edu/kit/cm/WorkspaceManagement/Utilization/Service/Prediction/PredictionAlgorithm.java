@@ -14,12 +14,14 @@ import java.util.List;
 
 public abstract class PredictionAlgorithm implements Prediction{
     protected HashMap<DayOfWeek,int[]> prediction;
+    protected HashMap<LocalDate,PredictionWithTimeDateStamp> predictionDatewise;
     protected HistoryRepositoryService historyRepositoryService;
     protected int iterations = 3;
 
 
     protected PredictionAlgorithm(){
         prediction = new HashMap<>();
+        predictionDatewise = new HashMap<>();
     }
 
     protected abstract int[] getArrayToday(List<List<HistoryEntry>> list);
@@ -37,7 +39,7 @@ public abstract class PredictionAlgorithm implements Prediction{
     }
 
     public int[] updateToday(DayOfWeek dayOfWeek) {
-        LocalTime[] blocks = getBlocks(dayOfWeek);
+        LocalTime[] blocks = getBlocks();
         LocalTime time = LocalTime.now();
         int[] predictionDay = new int[blocks.length - 1];
         int[] simplePredictionDay = update(dayOfWeek);
@@ -65,7 +67,7 @@ public abstract class PredictionAlgorithm implements Prediction{
     }
 
     private int[] update(DayOfWeek dayOfWeek) {
-        int[] predictionDay = new int[getBlocks(dayOfWeek).length - 1];
+        int[] predictionDay = new int[getBlocks().length - 1];
         int[][] past = getArrayPast(getHistoryfromPastWeeks(dayOfWeek));
 
         for (int i = 0; i < past.length; i++) {
@@ -84,8 +86,83 @@ public abstract class PredictionAlgorithm implements Prediction{
         return prediction.get(dayOfWeek);
     }
 
+    @Override
+    public int[] getPrediction(LocalDate localDate) {
+        if(localDate.isBefore(LocalDate.now())) {
+            if(this.predictionDatewise.containsKey(localDate)) {
+                return predictionDatewise.get(localDate).getPrediction();
+            } else {
+                predictionDatewise.put(localDate,new PredictionWithTimeDateStamp(calculatePrediction(localDate), LocalDate.now()));
+                return predictionDatewise.get(localDate).getPrediction();
+            }
+        } else {
+            if(this.predictionDatewise.containsKey(localDate)) {
+                if(predictionDatewise.get(localDate).getDateStamp().isBefore(LocalDate.now())) {
+                    predictionDatewise.put(localDate,new PredictionWithTimeDateStamp(calculatePrediction(localDate), LocalDate.now()));
+                    return predictionDatewise.get(localDate).getPrediction();
+                } else {
+                    return predictionDatewise.get(localDate).getPrediction();
+                }
+            } else {
+                predictionDatewise.put(localDate,new PredictionWithTimeDateStamp(calculatePrediction(localDate), LocalDate.now()));
+                return predictionDatewise.get(localDate).getPrediction();
+            }
+        }
+    }
 
-    private LocalTime[] getBlocks(DayOfWeek dayOfWeek) {
+    private int[] calculatePrediction(LocalDate localDate) {
+        List<HistoryEntry> allOnDayOfWeek = historyRepositoryService.findAllOnDayOfWeek(localDate.getDayOfWeek());
+        HashMap<Integer, List<HistoryEntry>> allOnDayOfWeekByBlock = this.getHistoryInBlocks(allOnDayOfWeek);
+        int [] arr = new int[getBlocks().length-1];
+        for (int i=0; i<getBlocks().length-1;i++) {
+            arr[i]=getAvgFreeSeatsByEntryList(allOnDayOfWeekByBlock.get(i));
+        }
+        return arr;
+    }
+
+
+    /**
+     * Takes a List of HistoryEntries and calculates the Average of Free Seats
+     * @param historyEntryList
+     * @return
+     */
+    private int getAvgFreeSeatsByEntryList(List<HistoryEntry> historyEntryList) {
+        long count = 0;
+        long freeSeatSum = 0;
+        for(HistoryEntry historyEntry: historyEntryList) {
+            freeSeatSum+=historyEntry.getFreeSeats();
+            count++;
+        }
+        if(count>0) {
+            return (int) (freeSeatSum/count);
+        } else {
+            return (int) freeSeatSum;
+        }
+    }
+
+
+    /**
+     * Split the given Entries into Blocks
+     */
+    private HashMap<Integer,List<HistoryEntry>> getHistoryInBlocks(List<HistoryEntry> givenEntries) {
+        HashMap<Integer,List<HistoryEntry>> historyEntriesOnBlock = new HashMap<>();
+        for (HistoryEntry oldEntry :givenEntries) {
+            for (int i=0; i<getBlocks().length-1;i++) {
+                if(oldEntry.getDate().toLocalTime().isAfter(getBlocks()[i])
+                        && oldEntry.getDate().toLocalTime().isBefore(getBlocks()[i+1])) {
+                    if(historyEntriesOnBlock.containsKey(i)) {
+                        historyEntriesOnBlock.get(i).add(oldEntry);
+                    } else {
+                        historyEntriesOnBlock.put(i,new ArrayList<>());
+                        historyEntriesOnBlock.get(i).add(oldEntry);
+                    }
+                }
+            }
+        }
+        return historyEntriesOnBlock;
+    }
+
+    private LocalTime[] getBlocks() {
         return new LocalTime[]{ LocalTime.of(8,0),
                                 LocalTime.of(9,45),
                                 LocalTime.of(11,30),
@@ -104,7 +181,7 @@ public abstract class PredictionAlgorithm implements Prediction{
     private List<List<List<HistoryEntry>>> getHistoryfromPastWeeks(DayOfWeek dayOfWeek) {
         List<List<List<HistoryEntry>>> listOfBlocks = new ArrayList<List<List<HistoryEntry>>>();
 
-        LocalTime[] time = getBlocks(dayOfWeek);
+        LocalTime[] time = getBlocks();
         LocalDate date = LocalDate.now().with(dayOfWeek).minusDays(60);
         if(date.isAfter(LocalDate.now())) {
             date.minusDays(7);
@@ -126,7 +203,7 @@ public abstract class PredictionAlgorithm implements Prediction{
     private List<List<HistoryEntry>> getHistoryFromToday() {
         List<List<HistoryEntry>> listOfBlocks = new ArrayList<>();
         LocalDate date = LocalDate.now().minusDays(60);
-        LocalTime[] time = getBlocks(date.getDayOfWeek());
+        LocalTime[] time = getBlocks();
         for(int i = 1; i < time.length; i++) {
             LocalDateTime from = LocalDateTime.of(date, time[i - 1]);
             LocalDateTime to = LocalDateTime.of(date, time[i]);

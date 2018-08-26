@@ -1,6 +1,7 @@
 package edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction;
 
 import edu.kit.cm.WorkspaceManagement.Utilization.Domain.HistoryEntry;
+import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.HistoryEntryJPA;
 import edu.kit.cm.WorkspaceManagement.Utilization.Service.HistoryRepositoryService;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
@@ -157,6 +158,12 @@ public abstract class PredictionAlgorithm implements Prediction{
                         historyEntriesOnBlock.get(i).add(oldEntry);
                     }
                 }
+            }
+        }
+        for(int i = 0;i<this.getBlocks().length;i++) {
+            if(!historyEntriesOnBlock.containsKey(i)) {
+                ArrayList<HistoryEntry> al = new ArrayList<>();
+                historyEntriesOnBlock.put(i,al);
             }
         }
         return historyEntriesOnBlock;

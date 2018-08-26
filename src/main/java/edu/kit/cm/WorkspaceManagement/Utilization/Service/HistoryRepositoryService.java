@@ -71,7 +71,7 @@ public class HistoryRepositoryService {
      * @param dayOfWeek
      * @return
      */
-    public List<HistoryEntry> findAllOnDayOfWeek(DayOfWeek dayOfWeek/* Friday*/) {
+    public List<HistoryEntry> findAllOnDayOfWeek(DayOfWeek dayOfWeek) {
         long newDay=dayOfWeek.getValue()-getLatestDate().getDayOfWeek().getValue();
         if(newDay>0) {
             newDay=newDay-7;

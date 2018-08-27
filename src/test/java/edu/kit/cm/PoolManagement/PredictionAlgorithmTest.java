@@ -28,6 +28,9 @@ public class PredictionAlgorithmTest {
 
     }
 
+    /**
+     * Expects a NullpointerException
+     */
     @Test(expected = NullPointerException.class)
     public void DataBaseDoNotRun () {
         PredictionAlgorithm predictionAlgorithm = new PredictionAlgorithm() {
@@ -44,6 +47,10 @@ public class PredictionAlgorithmTest {
         predictionAlgorithm.update();
     }
 
+
+    /**
+     * Tests the Prediction on a Date with a Mocked HistoryCrudRepository
+     */
     @Test
     public void testPredictionOnDate () {
         HistoryCrudRepository historyCrudRepository = mock(HistoryCrudRepository.class);
@@ -73,4 +80,6 @@ public class PredictionAlgorithmTest {
         assertEquals(predictionAlgorithmAvg.getPrediction(LocalDate.of(2018,8,27))[0],0);
         assertEquals(predictionAlgorithmAvg.getPrediction(LocalDate.of(2018,8,27))[2],25);
     }
+
+
 }

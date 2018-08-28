@@ -59,7 +59,7 @@ public class HistoryRepositoryServiceTest {
         });
 
         assertEquals(historyRepositoryService.findAllBetween(any(),any()).get(0).getDate(), mockedList.get(0).getDate());
-        assertEquals(historyRepositoryService.findAllEntitys().get(3).getDate(), mockedList.get(3));
+        assertEquals(historyRepositoryService.findAllEntitys().get(3).getDate(), mockedList.get(3).getDate());
 
 
 

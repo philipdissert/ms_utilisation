@@ -37,6 +37,8 @@ public class HistoryRepositoryServiceTest {
         mockedList.add(new HistoryEntryJPA(10, LocalDateTime.of(2013,5,1,12,30,10)));
     }
 
+
+    //test
     @Test
     public void test1(){
         HistoryCrudRepository historyCrudRepositoryMock = mock(HistoryCrudRepository.class);

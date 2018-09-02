@@ -10,14 +10,14 @@ import java.net.URL;
 import org.json.JSONObject;
 
 public class RestManager {
-	
+
 	public static JSONObject sendGetRequest(String subPath) {
 		return jsonRequest(subPath, "GET");
 	}
 	public static JSONObject sendGetRequest(String subPath, String param) {
 		return jsonRequest(subPath+"/"+param, "GET");
 	}
-	
+		
 	private static JSONObject jsonRequest(String subPath,String requestMethod) {
 		try {
 			String url = "https://workspace.cm.tm.kit.edu/"+subPath;

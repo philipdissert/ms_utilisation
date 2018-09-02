@@ -1,12 +1,16 @@
 package edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure;
 
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import edu.kit.cm.WorkspaceManagement.Utilization.Service.UtilizationAdapter;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Map;
 
 
 @CrossOrigin
@@ -14,6 +18,13 @@ import edu.kit.cm.WorkspaceManagement.Utilization.Service.UtilizationAdapter;
 public class UtilizationAPIController {
 	
 	UtilizationAdapter utilizationAdapter = UtilizationAdapter.getInstance();
+
+	@PutMapping("/update")
+	public void update(@RequestBody Map updateMap) {
+		utilizationAdapter.createPoolElementHashMap(new JSONArray(updateMap.get("poolElements").toString()));
+		utilizationAdapter.updateSeats();
+		utilizationAdapter.updateStates(new JSONObject(updateMap.get("computersWithState").toString()));
+	}
 
 	@GetMapping("/currentState")
 	public String getCurrentState() {		

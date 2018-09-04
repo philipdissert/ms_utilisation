@@ -1,8 +1,7 @@
 package edu.kit.cm.PoolManagement;
 
-import edu.kit.cm.WorkspaceManagement.Utilization.Service.UtilizationAdapter;
+import edu.kit.cm.ms_utilisation.Utilization.Service.UtilizationAdapter;
 
-import org.codehaus.groovy.runtime.powerassert.SourceText;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

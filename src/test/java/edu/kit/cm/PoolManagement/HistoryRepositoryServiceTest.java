@@ -1,8 +1,8 @@
 package edu.kit.cm.PoolManagement;
 
-import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.HistoryCrudRepository;
-import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.HistoryEntryJPA;
-import edu.kit.cm.WorkspaceManagement.Utilization.Service.HistoryRepositoryService;
+import edu.kit.cm.ms_utilisation.Utilization.Infrastructure.persistence.HistoryCrudRepository;
+import edu.kit.cm.ms_utilisation.Utilization.Infrastructure.persistence.HistoryEntryJPA;
+import edu.kit.cm.ms_utilisation.Utilization.Service.HistoryRepositoryService;
 import org.junit.Before;
 import org.junit.Test;
 

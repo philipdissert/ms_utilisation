@@ -3,8 +3,8 @@ package edu.kit.cm.PoolManagement.stepDefinitions;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import edu.kit.cm.WorkspaceManagement.Utilization.Domain.PoolElementState;
-import edu.kit.cm.WorkspaceManagement.Utilization.Service.UtilizationAdapter;
+import edu.kit.cm.ms_utilisation.Utilization.Domain.PoolElementState;
+import edu.kit.cm.ms_utilisation.Utilization.Service.UtilizationAdapter;
 
 
 import static org.junit.Assert.assertEquals;

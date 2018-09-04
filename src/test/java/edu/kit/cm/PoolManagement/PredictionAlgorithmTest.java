@@ -1,19 +1,17 @@
 package edu.kit.cm.PoolManagement;
 
-import edu.kit.cm.WorkspaceManagement.Utilization.Domain.HistoryEntry;
-import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.HistoryCrudRepository;
-import edu.kit.cm.WorkspaceManagement.Utilization.Infrastructure.persistence.HistoryEntryJPA;
-import edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction.PredictionAlgorithm;
-import edu.kit.cm.WorkspaceManagement.Utilization.Service.Prediction.PredictionAlgorithmAvg;
-import edu.kit.cm.WorkspaceManagement.Utilization.Thread.RepositoryThread;
+import edu.kit.cm.ms_utilisation.Utilization.Domain.HistoryEntry;
+import edu.kit.cm.ms_utilisation.Utilization.Infrastructure.persistence.HistoryCrudRepository;
+import edu.kit.cm.ms_utilisation.Utilization.Infrastructure.persistence.HistoryEntryJPA;
+import edu.kit.cm.ms_utilisation.Utilization.Service.Prediction.PredictionAlgorithm;
+import edu.kit.cm.ms_utilisation.Utilization.Service.Prediction.PredictionAlgorithmAvg;
+import edu.kit.cm.ms_utilisation.Utilization.Thread.RepositoryThread;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;

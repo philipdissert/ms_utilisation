@@ -2,6 +2,8 @@ package edu.kit.cm.ms_utilisation.Utilization.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 
 import edu.kit.cm.ms_utilisation.Utilization.Service.Prediction.PredictionAlgorithmAvg;
@@ -31,7 +33,7 @@ public class UtilizationAdapter {
     }
 
     public void createPoolElementHashMap(JSONArray jsonArray) {
-        poolElementHashMap = new HashMap<Integer, PoolElementState>();
+        poolElementHashMap = new HashMap<>();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 int id = jsonArray.getJSONObject(i).getInt("id");
@@ -70,6 +72,7 @@ public class UtilizationAdapter {
     public void updateSeats() {
         int freeCount = 0;
         int occupiedCount = 0;
+
         for(PoolElementState y : poolElementHashMap.values()) {
             if(y.getState()==1 || y.getState()==2) {
                 freeCount++;
@@ -87,6 +90,7 @@ public class UtilizationAdapter {
             jsonObject.put("occupied", currentUtilization.getOccupiedWorkspaces());
             jsonObject.put("percentageFree", currentUtilization.getPercentageFree());
             jsonObject.put("percentageOccupied", currentUtilization.getPercentageOccupied());
+            jsonObject.put("max", currentUtilization.getMaxWorkspaces());
             return jsonObject;
         } catch (JSONException e) {
             return new JSONObject();
@@ -107,6 +111,10 @@ public class UtilizationAdapter {
 
     public double getPercentageOccupied() {
         return currentUtilization.getPercentageOccupied();
+    }
+
+    public int getMaxWorkspace() {
+        return currentUtilization.getMaxWorkspaces();
     }
 
     public JSONObject getCurrentState() {

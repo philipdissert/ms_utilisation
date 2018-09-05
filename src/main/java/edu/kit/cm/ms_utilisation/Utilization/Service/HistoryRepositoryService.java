@@ -30,6 +30,14 @@ public class HistoryRepositoryService {
         return historyEntryMapper.map(entry);
     }
 
+    public Iterable<HistoryEntryJPA> createAllEntitys(List<HistoryEntry> entries) {
+        List<HistoryEntryJPA> hpa = new ArrayList<>();
+        for(HistoryEntry x: entries){
+            hpa.add(historyEntryMapper.map(x));
+        }
+        return historyCrudRepository.saveAll(hpa);
+    }
+
     public List<HistoryEntry> findAllEntitys() {
         List<HistoryEntry> list = new ArrayList<HistoryEntry>();
         for(HistoryEntryJPA historyEntryJpa: historyCrudRepository.findAll()){

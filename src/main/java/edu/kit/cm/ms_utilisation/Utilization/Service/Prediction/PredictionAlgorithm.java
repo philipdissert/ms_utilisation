@@ -2,6 +2,7 @@ package edu.kit.cm.ms_utilisation.Utilization.Service.Prediction;
 
 import edu.kit.cm.ms_utilisation.Utilization.Domain.HistoryEntry;
 import edu.kit.cm.ms_utilisation.Utilization.Service.HistoryRepositoryService;
+import edu.kit.cm.ms_utilisation.Utilization.Service.UtilizationAdapter;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 import java.time.LocalDate;
@@ -80,32 +81,38 @@ public abstract class PredictionAlgorithm implements Prediction{
         return predictionDay;
     }
 
+    private int[] toFree(int[] pred) {
+        for (int i=0; i<pred.length;i++) {
+            pred[i] = UtilizationAdapter.getInstance().getMaxWorkspace()-pred[i];
+        }
+        return pred;
+    }
 
     @Override
     public int[] getPrediction(DayOfWeek dayOfWeek) {
-        return prediction.get(dayOfWeek);
+        return toFree(prediction.get(dayOfWeek));
     }
 
     @Override
     public int[] getPrediction(LocalDate localDate) {
         if(localDate.isBefore(LocalDate.now())) {
             if(this.predictionDatewise.containsKey(localDate)) {
-                return predictionDatewise.get(localDate).getPrediction();
+                return toFree(predictionDatewise.get(localDate).getPrediction());
             } else {
                 predictionDatewise.put(localDate,new PredictionWithTimeDateStamp(calculatePrediction(localDate), LocalDate.now()));
-                return predictionDatewise.get(localDate).getPrediction();
+                return toFree(predictionDatewise.get(localDate).getPrediction());
             }
         } else {
             if(this.predictionDatewise.containsKey(localDate)) {
                 if(predictionDatewise.get(localDate).getDateStamp().isBefore(LocalDate.now())) {
                     predictionDatewise.put(localDate,new PredictionWithTimeDateStamp(calculatePrediction(localDate), LocalDate.now()));
-                    return predictionDatewise.get(localDate).getPrediction();
+                    return toFree(predictionDatewise.get(localDate).getPrediction());
                 } else {
-                    return predictionDatewise.get(localDate).getPrediction();
+                    return toFree(predictionDatewise.get(localDate).getPrediction());
                 }
             } else {
                 predictionDatewise.put(localDate,new PredictionWithTimeDateStamp(calculatePrediction(localDate), LocalDate.now()));
-                return predictionDatewise.get(localDate).getPrediction();
+                return toFree(predictionDatewise.get(localDate).getPrediction());
             }
         }
     }

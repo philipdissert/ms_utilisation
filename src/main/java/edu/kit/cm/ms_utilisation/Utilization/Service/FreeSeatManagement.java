@@ -1,15 +1,41 @@
 package edu.kit.cm.ms_utilisation.Utilization.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.web.client.RestTemplate;
 
 import edu.kit.cm.ms_utilisation.Utilization.Domain.HistoryEntry;
 
-public class ATISSeates implements IFreeSeats {
+public class FreeSeatManagement{
+
+	private static FreeSeatManagement freeSeatManagement;
+	private HistoryRepositoryService historyRepositoryService;
+
+	private FreeSeatManagement() {}
+
+	public static FreeSeatManagement getInstance() {
+		if(freeSeatManagement!=null){
+			return freeSeatManagement;
+		} return freeSeatManagement = new FreeSeatManagement();
+	}
+
+	public void setHistoryRepositoryService(HistoryRepositoryService historyRepositoryService) {
+		this.historyRepositoryService = historyRepositoryService;
+	}
+
+	public void addHistoryEntryList(List<HistoryEntry> historyEntryList) {
+		historyRepositoryService.createAllEntitys(historyEntryList);
+	}
+
+	public LocalDateTime getLastHistoryEntryDate(){
+		LocalDateTime date = historyRepositoryService.getLatestDate();
+		if (date == null) {
+			return LocalDateTime.of(0,1,1,0,0,0);
+		}
+		return date;
+	}
+
+
+	/*
 	private List<HistoryEntry> getHistoryEntryList(LocalDateTime localDateTime) {
 		List<HistoryEntry> list = new ArrayList<HistoryEntry>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd_HH:mm");
@@ -39,5 +65,5 @@ public class ATISSeates implements IFreeSeats {
 	@Override
 	public List<HistoryEntry> getSeats(LocalDateTime localDateTime) {
 		return getHistoryEntryList(localDateTime);
-	}
+	}*/
 }

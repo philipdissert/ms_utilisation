@@ -90,29 +90,29 @@ public abstract class PredictionAlgorithm implements Prediction{
 
     @Override
     public int[] getPrediction(DayOfWeek dayOfWeek) {
-        return toFree(prediction.get(dayOfWeek));
+        return prediction.get(dayOfWeek);
     }
 
     @Override
     public int[] getPrediction(LocalDate localDate) {
         if(localDate.isBefore(LocalDate.now())) {
             if(this.predictionDatewise.containsKey(localDate)) {
-                return toFree(predictionDatewise.get(localDate).getPrediction());
+                return predictionDatewise.get(localDate).getPrediction();
             } else {
                 predictionDatewise.put(localDate,new PredictionWithTimeDateStamp(calculatePrediction(localDate), LocalDate.now()));
-                return toFree(predictionDatewise.get(localDate).getPrediction());
+                return predictionDatewise.get(localDate).getPrediction();
             }
         } else {
             if(this.predictionDatewise.containsKey(localDate)) {
                 if(predictionDatewise.get(localDate).getDateStamp().isBefore(LocalDate.now())) {
                     predictionDatewise.put(localDate,new PredictionWithTimeDateStamp(calculatePrediction(localDate), LocalDate.now()));
-                    return toFree(predictionDatewise.get(localDate).getPrediction());
+                    return predictionDatewise.get(localDate).getPrediction();
                 } else {
-                    return toFree(predictionDatewise.get(localDate).getPrediction());
+                    return predictionDatewise.get(localDate).getPrediction();
                 }
             } else {
                 predictionDatewise.put(localDate,new PredictionWithTimeDateStamp(calculatePrediction(localDate), LocalDate.now()));
-                return toFree(predictionDatewise.get(localDate).getPrediction());
+                return predictionDatewise.get(localDate).getPrediction();
             }
         }
     }

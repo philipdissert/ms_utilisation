@@ -138,12 +138,20 @@ public class UtilizationAdapter {
         return jsonObject;
     }
 
+    private int[] toFree(int[] pred) {
+        int []freePred = new int [pred.length];
+        for (int i=0; i<pred.length;i++) {
+            freePred[i] =UtilizationAdapter.getInstance().getMaxWorkspace()-pred[i];
+        }
+        return freePred;
+    }
+
     public int[] getPredictionAtWeekDay(String dayOfWeek) {
-        return PredictionAlgorithmAvg.getInstance().getPrediction(DayOfWeek.valueOf(dayOfWeek));
+        return toFree(PredictionAlgorithmAvg.getInstance().getPrediction(DayOfWeek.valueOf(dayOfWeek)));
     }
 
     public int[] getPredictionAtDate(String date) {
-        return PredictionAlgorithmAvg.getInstance().getPrediction(parseStringDateOnControllerToDate(date));
+        return toFree(PredictionAlgorithmAvg.getInstance().getPrediction(parseStringDateOnControllerToDate(date)));
 
     }
 

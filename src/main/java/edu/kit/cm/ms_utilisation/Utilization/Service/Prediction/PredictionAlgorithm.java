@@ -81,13 +81,6 @@ public abstract class PredictionAlgorithm implements Prediction{
         return predictionDay;
     }
 
-    private int[] toFree(int[] pred) {
-        for (int i=0; i<pred.length;i++) {
-            pred[i] = UtilizationAdapter.getInstance().getMaxWorkspace()-pred[i];
-        }
-        return pred;
-    }
-
     @Override
     public int[] getPrediction(DayOfWeek dayOfWeek) {
         return prediction.get(dayOfWeek);

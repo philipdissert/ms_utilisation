@@ -1,4 +1,4 @@
-package edu.kit.cm.PoolManagement;
+package edu.kit.cm.ms_utlilsation;
 
 import edu.kit.cm.ms_utilisation.Utilization.Infrastructure.persistence.HistoryCrudRepository;
 import edu.kit.cm.ms_utilisation.Utilization.Infrastructure.persistence.HistoryEntryJPA;

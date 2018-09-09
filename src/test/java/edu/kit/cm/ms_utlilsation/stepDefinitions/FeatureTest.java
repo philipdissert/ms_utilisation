@@ -1,4 +1,4 @@
-package edu.kit.cm.PoolManagement.stepDefinitions;
+package edu.kit.cm.ms_utlilsation.stepDefinitions;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;

@@ -1,16 +1,14 @@
-package edu.kit.cm.PoolManagement;
+package edu.kit.cm.ms_utlilsation;
 
 import edu.kit.cm.ms_utilisation.Utilization.Domain.HistoryEntry;
 import edu.kit.cm.ms_utilisation.Utilization.Infrastructure.persistence.HistoryCrudRepository;
 import edu.kit.cm.ms_utilisation.Utilization.Infrastructure.persistence.HistoryEntryJPA;
 import edu.kit.cm.ms_utilisation.Utilization.Service.Prediction.PredictionAlgorithm;
 import edu.kit.cm.ms_utilisation.Utilization.Service.Prediction.PredictionAlgorithmAvg;
-import edu.kit.cm.ms_utilisation.Utilization.Service.UtilizationAdapter;
 import edu.kit.cm.ms_utilisation.Utilization.Thread.RepositoryThread;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
